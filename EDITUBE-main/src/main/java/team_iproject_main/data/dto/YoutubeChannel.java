@@ -14,6 +14,7 @@ public class YoutubeChannel {
     private List<Item> items;
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {
         private String kind;
         private String etag;
@@ -22,6 +23,7 @@ public class YoutubeChannel {
         private Statistics statistics;
 
         @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Snippet {
             private String title;
             private String description;
@@ -31,6 +33,7 @@ public class YoutubeChannel {
         }
 
         @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Statistics {
             private boolean hiddenSubscriberCount;
             private int subscriberCount;
@@ -41,9 +44,9 @@ public class YoutubeChannel {
         @Data
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Thumbnails {
-            private YoutubeChannelList.Item.Snippet.Thumbnails.Default defaultThumbnail;
-            private YoutubeChannelList.Item.Snippet.Thumbnails.High high;
-            private YoutubeChannelList.Item.Snippet.Thumbnails.Medium medium;
+            private Default defaultThumbnail;
+            private High high;
+            private Medium medium;
 
             @Data
             public static class Default {

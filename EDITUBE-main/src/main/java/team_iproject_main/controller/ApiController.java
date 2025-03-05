@@ -53,8 +53,8 @@ public class ApiController {
     @Value("${mygoogle.clientredirectyoutube}")
     private String clientredirectyoutube;
 
-    private final GoogleUtils configUtils;
-    private final ApiExample apiExample;
+    @Value("${mygoogle.authurl}")
+    private String authUrl;
 
     @GetMapping("address-pop")
     public String addressPop(){
@@ -92,9 +92,6 @@ public class ApiController {
     public String postRodeReturn(HttpServletRequest request,
                                  @RequestBody String body,
                                  Model model) throws JsonProcessingException, UnsupportedEncodingException {
-        String authUrl = configUtils.googleInitUrl();
-        URI redirectUri = null;
-
 
         System.out.println("포스트");
         System.out.println("headers : "+ request.getHeaderNames());
@@ -194,11 +191,10 @@ public class ApiController {
             HttpEntity<GoogleLoginRequest> httpRequestEntity = new HttpEntity<>(requestParams, headers);
 
             // Post 요청
-            ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(configUtils.getAuthurl() + "/token", httpRequestEntity, String.class);
+            ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(this.authUrl + "/token", httpRequestEntity, String.class);
 
             System.out.println("크리덴셜 확인");
             System.out.println(apiResponseJson.getBody());
-
 
             // ObjectMapper를 통해 String to Object로 변환
             ObjectMapper objectMapper = new ObjectMapper();
@@ -223,20 +219,31 @@ public class ApiController {
 
             System.out.println("결과값");
             System.out.println(response);
-            System.out.println(response.toString());*/
+            System.out.println(response.toString());
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
+            YoutubeChannelList channelList = mapper.readValue(response.toString(), YoutubeChannelList.class);
+
+            System.out.println("변환 결과값");
+            System.out.println(channelList);
+            System.out.println(channelList.toString());
+            */
 
             // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
-            String requestUrl = UriComponentsBuilder.fromHttpUrl(configUtils.googleInitYoutubeUrl() + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
+            String requestUrl = UriComponentsBuilder.fromHttpUrl(authUrl + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
 
             String resultJson = restTemplate.getForObject(requestUrl, String.class);
 
-            HttpHeaders headers2 = new HttpHeaders();
-            headers2.setBearerAuth(accessToken);
+            headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(accessToken);
 
             String reqUrl = "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true&key=" + apiKey;
 
             // 채널 정보 요청
-            HttpEntity<String> entity = new HttpEntity<>(headers2);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
             ResponseEntity<String> response = restTemplate.exchange(
                     reqUrl,
                     HttpMethod.GET,
@@ -244,10 +251,19 @@ public class ApiController {
                     String.class
             );
 
+            log.info("response : {}", response.getBody());
+
+//          response 반환값이 바디에 있는 값 그대로 갖고옴 readValue 에서 오류나기 때문에 바디영역 String 값으로 변환
+//          httpEntity 에서 String 으로 지정
+            String responseBody = response.getBody();
+
             ObjectMapper mapper = new ObjectMapper();
 
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
-            YoutubeChannel channelList = mapper.readValue(response.toString(), YoutubeChannel.class);
+            YoutubeChannel channelList = mapper.readValue(responseBody, YoutubeChannel.class);
+//          readValue -> Json 값을 String 으로 받아서 YoutubeChannel 객체로 변환해주는 메서드
+//          String 값이 아니면 JsonParseException 예외 뜬다.
+//          YoutubeChannelList 정상 작동 but, JsonIgnoreProperties 썼는데 YoutubeChannel 객체는 왜 에러?
 
             System.out.println("변환 결과값");
             System.out.println(channelList);
