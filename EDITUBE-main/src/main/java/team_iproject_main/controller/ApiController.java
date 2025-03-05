@@ -17,8 +17,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import team_iproject_main.data.Request.RequestId;
-import team_iproject_main.data.utils.*;
+import team_iproject_main.data.dto.GoogleUtils;
+import team_iproject_main.data.dto.YoutubeChannel;
+import team_iproject_main.data.dto.YoutubeChannelList;
+import team_iproject_main.data.request.GoogleLoginRequest;
+import team_iproject_main.data.request.RequestId;
+import team_iproject_main.data.dto.JusoDto;
+import team_iproject_main.data.response.GoogleLoginResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -172,10 +177,10 @@ public class ApiController {
 
         // 이 템플릿을 통해 전달할때 필요한 자료를 담아줄려고 만든 클래스
         GoogleLoginRequest requestParams = GoogleLoginRequest.builder()
-                .clientId(configUtils.getClientid())
-                .clientSecret(configUtils.getClientsecret())
+                .clientId(CLIENT_ID)
+                .clientSecret(CLIENT_SECRETS)
                 .code(authCode)
-                .redirectUri(configUtils.getClientredirectyoutube())
+                .redirectUri(clientredirectyoutube)
                 .grantType("authorization_code")
                 .build();
 
@@ -206,9 +211,7 @@ public class ApiController {
 
             String accessToken = googleLoginResponse.getAccessToken();
 
-            //YouTube youTube = apiExample.getService(accessToken);
-
-            YouTube youTube = apiExample.getYouTubeService(accessToken);
+           /* YouTube youTube = apiExample.getYouTubeService(accessToken);
 
 
             // 여기까지 세팅
@@ -220,14 +223,31 @@ public class ApiController {
 
             System.out.println("결과값");
             System.out.println(response);
-            System.out.println(response.toString());
+            System.out.println(response.toString());*/
 
+            // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
+            String requestUrl = UriComponentsBuilder.fromHttpUrl(configUtils.googleInitYoutubeUrl() + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
 
+            String resultJson = restTemplate.getForObject(requestUrl, String.class);
+
+            HttpHeaders headers2 = new HttpHeaders();
+            headers2.setBearerAuth(accessToken);
+
+            String reqUrl = "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true&key=" + apiKey;
+
+            // 채널 정보 요청
+            HttpEntity<String> entity = new HttpEntity<>(headers2);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    reqUrl,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
 
             ObjectMapper mapper = new ObjectMapper();
 
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
-            YoutubeChannelList channelList = mapper.readValue(response.toString(), YoutubeChannelList.class);
+            YoutubeChannel channelList = mapper.readValue(response.toString(), YoutubeChannel.class);
 
             System.out.println("변환 결과값");
             System.out.println(channelList);
@@ -242,11 +262,6 @@ public class ApiController {
                 System.out.println("원하는 값 id : "+ channelList.getItems().get(0).getId());
             }
 
-
-            // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
-            String requestUrl = UriComponentsBuilder.fromHttpUrl(configUtils.googleInitYoutubeUrl() + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
-
-            String resultJson = restTemplate.getForObject(requestUrl, String.class);
 
             if(resultJson != null) {
                 RequestId requestId = new RequestId();

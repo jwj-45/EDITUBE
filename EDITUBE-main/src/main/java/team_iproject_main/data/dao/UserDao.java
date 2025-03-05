@@ -1,8 +1,8 @@
 package team_iproject_main.data.dao;
 
-import team_iproject_main.data.Request.RegisterReqeustChannel;
-import team_iproject_main.data.Request.UserSearchRequest;
-import team_iproject_main.data.Request.UserUpdateRequest;
+import team_iproject_main.data.request.RegisterReqeustChannel;
+import team_iproject_main.data.request.UserSearchRequest;
+import team_iproject_main.data.request.UserUpdateRequest;
 import team_iproject_main.data.dto.UserDO;
 
 import java.io.UnsupportedEncodingException;

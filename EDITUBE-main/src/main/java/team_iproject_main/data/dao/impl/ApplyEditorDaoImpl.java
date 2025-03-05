@@ -8,9 +8,9 @@ import team_iproject_main.data.dao.ApplyEditorDao;
 import team_iproject_main.data.dto.ApplierListDO;
 import team_iproject_main.data.dto.ApplyEditorDO;
 import team_iproject_main.data.dto.UserEditorDO;
-import team_iproject_main.data.Mapper.ApplierListRowMapper;
-import team_iproject_main.data.Mapper.ApplyEditorRowMapper;
-import team_iproject_main.data.Mapper.EditorRowMapper;
+import team_iproject_main.data.mapper.ApplierListRowMapper;
+import team_iproject_main.data.mapper.ApplyEditorRowMapper;
+import team_iproject_main.data.mapper.EditorRowMapper;
 
 import java.util.List;
 

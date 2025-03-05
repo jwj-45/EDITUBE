@@ -6,8 +6,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import team_iproject_main.data.dao.RecruitBoardDao;
 import team_iproject_main.data.dto.*;
-import team_iproject_main.data.Mapper.*;
-import team_iproject_main.data.Request.RequestKeyword;
+import team_iproject_main.data.mapper.*;
+import team_iproject_main.data.request.RequestKeyword;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;

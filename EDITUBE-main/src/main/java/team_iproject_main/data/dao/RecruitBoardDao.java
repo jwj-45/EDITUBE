@@ -1,6 +1,6 @@
 package team_iproject_main.data.dao;
 
-import team_iproject_main.data.Request.RequestKeyword;
+import team_iproject_main.data.request.RequestKeyword;
 import team_iproject_main.data.dto.*;
 import java.util.List;
 

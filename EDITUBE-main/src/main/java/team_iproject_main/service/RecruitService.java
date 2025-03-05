@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team_iproject_main.data.dao.impl.RecruitBoardDaoImpl;
 import team_iproject_main.data.dto.*;
-import team_iproject_main.data.Request.RecruitBoardEditRequest;
-import team_iproject_main.data.Request.RequestKeyword;
+import team_iproject_main.data.request.RecruitBoardEditRequest;
+import team_iproject_main.data.request.RequestKeyword;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -8,11 +8,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import team_iproject_main.data.dao.UserDao;
 import team_iproject_main.data.dto.UserDO;
-import team_iproject_main.data.Mapper.UserRowMapper;
-import team_iproject_main.data.Mapper.YoutuberRowMapper;
-import team_iproject_main.data.Request.RegisterReqeustChannel;
-import team_iproject_main.data.Request.UserSearchRequest;
-import team_iproject_main.data.Request.UserUpdateRequest;
+import team_iproject_main.data.mapper.UserRowMapper;
+import team_iproject_main.data.mapper.YoutuberRowMapper;
+import team_iproject_main.data.request.RegisterReqeustChannel;
+import team_iproject_main.data.request.UserSearchRequest;
+import team_iproject_main.data.request.UserUpdateRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;

@@ -12,7 +12,7 @@ import team_iproject_main.data.dto.PortfolioDO;
 import team_iproject_main.data.dto.PortfolioEditDO;
 import team_iproject_main.data.dto.PortfolioToolsDO;
 import team_iproject_main.data.dto.UserDO;
-import team_iproject_main.data.Request.PortfolioEditRequest;
+import team_iproject_main.data.request.PortfolioEditRequest;
 import team_iproject_main.service.PortfolioService;
 import team_iproject_main.service.UserService;
 

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import team_iproject_main.exception.*;
 import team_iproject_main.data.dto.EmailDto;
 import team_iproject_main.data.dto.UserDO;
-import team_iproject_main.data.Request.*;
+import team_iproject_main.data.request.*;
 import team_iproject_main.service.UserService;
 
 import jakarta.servlet.http.HttpSession;

@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import team_iproject_main.data.dao.QnADao;
 import team_iproject_main.data.dto.QnADO;
-import team_iproject_main.data.Mapper.QnARowMapper;
+import team_iproject_main.data.mapper.QnARowMapper;
 
 import java.util.List;
 

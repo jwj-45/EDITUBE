@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import team_iproject_main.data.dto.*;
-import team_iproject_main.data.Request.RecruitBoardEditRequest;
-import team_iproject_main.data.Request.RequestKeyword;
+import team_iproject_main.data.request.RecruitBoardEditRequest;
+import team_iproject_main.data.request.RequestKeyword;
 import team_iproject_main.service.RecruitService;
 
 import jakarta.servlet.http.HttpSession;

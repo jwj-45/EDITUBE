@@ -7,7 +7,7 @@ import team_iproject_main.data.dao.impl.PortfolioDaoImpl;
 import team_iproject_main.data.dto.PortfolioDO;
 import team_iproject_main.data.dto.PortfolioEditDO;
 import team_iproject_main.data.dto.PortfolioToolsDO;
-import team_iproject_main.data.Request.PortfolioEditRequest;
+import team_iproject_main.data.request.PortfolioEditRequest;
 
 import java.util.List;
 
