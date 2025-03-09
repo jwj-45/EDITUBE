@@ -6,6 +6,6 @@ import lombok.Data;
 public class EmailDto {
     private String value;
     private String nickname;
-    private String phone_number;
+    private String phoneNumber;
 
 }

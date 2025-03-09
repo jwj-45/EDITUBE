@@ -18,7 +18,7 @@ public class UserDO {
     private String password;
     private String name;
     private String nickname;
-    private String phone_number;
+    private String phoneNumber;
     private String address;
     private String detail_addr;
     private String user_type;
@@ -33,13 +33,13 @@ public class UserDO {
     private String channel_name;
     private String channel_photo;
 
-    public UserDO (String email, String password, String name, String nickname, String phone_number, String address, String detail_addr, String user_type,
+    public UserDO (String email, String password, String name, String nickname, String phoneNumber, String address, String detail_addr, String user_type,
                    String gender, LocalDate birth_date) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.address = address;
         this.detail_addr = detail_addr;
         this.user_type = user_type;
@@ -47,13 +47,13 @@ public class UserDO {
         this.birth_date = birth_date;
     }
 
-    public UserDO (String email, String password, String name, String nickname, String phone_number, String address, String detail_addr, String user_type,
+    public UserDO (String email, String password, String name, String nickname, String phoneNumber, String address, String detail_addr, String user_type,
                    String gender, LocalDate birth_date, String channel_id, Long subscribe, Long video_count, Long view_count, String channel_name, String channel_photo) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.address = address;
         this.detail_addr = detail_addr;
         this.user_type = user_type;
@@ -75,9 +75,9 @@ public class UserDO {
 
     //0506- 손주현
     //매개변수의 name이랑 phonenum 비교해서 boolean으로 넘겨줌
-    public boolean checkNameAndPhonenum(String name, String phone_number) {
-        log.info("DO" + (this.name.equals(name) && this.phone_number.equals(phone_number)));
-        return (this.name.equals(name) && this.phone_number.equals(phone_number));
+    public boolean checkNameAndPhonenum(String name, String phoneNumber) {
+        log.info("DO" + (this.name.equals(name) && this.phoneNumber.equals(phoneNumber)));
+        return (this.name.equals(name) && this.phoneNumber.equals(phoneNumber));
     }
 
 
@@ -90,7 +90,7 @@ public class UserDO {
         return (this.nickname.equals(nickname));
     }
 
-    public boolean ConFirmPhoneNumber(String phone_number) {
-        return (this.phone_number.equals(phone_number));
+    public boolean ConFirmPhoneNumber(String phoneNumber) {
+        return (this.phoneNumber.equals(phoneNumber));
     }
 }

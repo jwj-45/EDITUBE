@@ -3,8 +3,8 @@ function submitHandler() {
     var password = document.querySelector('#password');
     var confirmPassword = document.querySelector('#confirmPassword');
     var nickname = document.querySelector('#nickname');
-    var bithdate = document.querySelector('#birth_date');
-    var phonenumber = document.querySelector('#phone_number');
+    var bithdate = document.querySelector('#birthDate');
+    var phonenumber = document.querySelector('#phoneNumber');
     var address1 = document.querySelector('#address');
     var addr_detail = document.querySelector('#detail_addr');
     var sex = document.querySelector('#gender');

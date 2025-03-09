@@ -33,9 +33,9 @@ public class UserDaoImpl implements UserDao {
         String password = encoder.encode(user.getPassword());
         user.setPassword(password);
 
-        String sql = "INSERT INTO USER_INFO(EMAIL, PASSWORD, NAME, NICKNAME, PHONE_NUMBER, ADDRESS, DETAIL_ADDR, USER_TYPE, GENDER, BIRTH_DATE) " +
+        String sql = "INSERT INTO USER_INFO(EMAIL, PASSWORD, NAME, NICKNAME, phone_number, ADDRESS, DETAIL_ADDR, USER_TYPE, GENDER, BIRTH_DATE) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getName(), user.getNickname(), user.getPhone_number(),
+        jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getName(), user.getNickname(), user.getPhoneNumber(),
                 user.getAddress(), user.getDetail_addr(), user.getUser_type(), user.getGender(), user.getBirth_date());
 
         String sqluqid = "INSERT INTO USER_EDITOR(EDITOR_EMAIL, IS_UPLOADED) " +
@@ -49,9 +49,9 @@ public class UserDaoImpl implements UserDao {
         String password = encoder.encode(user.getPassword());
         user.setPassword(password);
 
-        String sql = "INSERT INTO USER_INFO(EMAIL, PASSWORD, NAME, NICKNAME, PHONE_NUMBER, ADDRESS, DETAIL_ADDR, USER_TYPE, GENDER, BIRTH_DATE) " +
+        String sql = "INSERT INTO USER_INFO(EMAIL, PASSWORD, NAME, NICKNAME, phone_number, ADDRESS, DETAIL_ADDR, USER_TYPE, GENDER, BIRTH_DATE) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getName(), user.getNickname(), user.getPhone_number(),
+        jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getName(), user.getNickname(), user.getPhoneNumber(),
                 user.getAddress(), user.getDetail_addr(), user.getUser_type(), user.getGender(), user.getBirth_date());
 
         String sql1 = "INSERT INTO USER_YOUTUBER(YOUTUBER_EMAIL, CHANNEL_ID, SUBSCRIBE, VIDEO_COUNT, VIEW_COUNT, CHANNEL_NAME, CHANNEL_PHOTO) " +
@@ -88,12 +88,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserDO findByPhoneNumber(String phone_number) {
+    public UserDO findByPhoneNumber(String phoneNumber) {
         String sql = "SELECT * FROM user_info WHERE phone_number = ?";
         UserDO user = null;
 
         try{
-            user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), phone_number);
+            user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), phoneNumber);
             log.info("userDAO"+ user);
         }
         catch (EmptyResultDataAccessException e){
@@ -128,11 +128,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserDO findByNameAndPhone(String name, String phone_number){
-        String sql = "SELECT * FROM USER_INFO WHERE NAME = ? AND PHONE_NUMBER = ?";
+    public UserDO findByNameAndPhone(String name, String phoneNumber){
+        String sql = "SELECT * FROM USER_INFO WHERE NAME = ? AND phone_number = ?";
         UserDO user = null;
         try{
-            user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), name, phone_number);
+            user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), name, phoneNumber);
         }
         catch (EmptyResultDataAccessException e){
         }
@@ -176,7 +176,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void updateUserInfo(UserUpdateRequest userUpdateRequest, String email) {
         String sql = "update user_info set nickname=?,name=?,phone_number=?,address=?,detail_addr=?,birth_date=? where email=?";
-        jdbcTemplate.update(sql,userUpdateRequest.getNickname(),userUpdateRequest.getName(), userUpdateRequest.getPhone_number(),
+        jdbcTemplate.update(sql,userUpdateRequest.getNickname(),userUpdateRequest.getName(), userUpdateRequest.getPhoneNumber(),
                 userUpdateRequest.getAddress(),userUpdateRequest.getDetail_addr(), LocalDate.parse(userUpdateRequest.getBirth_date()), email);
 
     }

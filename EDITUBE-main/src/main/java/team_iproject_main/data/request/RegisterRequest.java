@@ -8,16 +8,16 @@ public class RegisterRequest {
     private String password;
     private String confirmPassword;
     private String name;
-    private String nickname;
-    private String phone_number;
+    private String nickName;
+    private String phoneNumber;
     private String address;
-    private String detail_addr;
+    private String detailAddr;
     private String gender;
-    private String birth_date;
-    private String channel_id;
+    private String birthDate;
+    private String channelId;
     private Long subscribe;
-    private Long video_count;
-    private Long view_count;
-    private String channel_name;
-    private String channel_photo;
+    private Long videoCount;
+    private Long viewCount;
+    private String channelName;
+    private String channelPhoto;
 }

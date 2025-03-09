@@ -6,8 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.ChannelListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,12 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import team_iproject_main.data.dto.GoogleUtils;
-import team_iproject_main.data.dto.YoutubeChannel;
-import team_iproject_main.data.dto.YoutubeChannelList;
-import team_iproject_main.data.request.GoogleLoginRequest;
-import team_iproject_main.data.request.RequestId;
 import team_iproject_main.data.dto.JusoDto;
+import team_iproject_main.data.dto.YoutubeChannel;
+import team_iproject_main.data.request.GoogleOAuthRequest;
+import team_iproject_main.data.request.RequestId;
 import team_iproject_main.data.response.GoogleLoginResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +27,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +64,7 @@ public class ApiController {
     @GetMapping(value = "/road-api")
     public ResponseEntity<Object> rodeApi() {
         String authUrl = "https://business.juso.go.kr/addrlink/addrLinkUrl.do?confmKey=U01TX0FVVEgyMDIzMDUwMjE0MTI1MDExMzczNzM=&returnUrl=http://localhost:3030/road-return&resultType=4";
-        URI redirectUri = null;
+        URI redirectUri;
 
         System.out.println("요청 url : "+ authUrl);
 
@@ -173,7 +168,7 @@ public class ApiController {
         RestTemplate restTemplate = new RestTemplate();
 
         // 이 템플릿을 통해 전달할때 필요한 자료를 담아줄려고 만든 클래스
-        GoogleLoginRequest requestParams = GoogleLoginRequest.builder()
+        GoogleOAuthRequest requestParams = GoogleOAuthRequest.builder()
                 .clientId(CLIENT_ID)
                 .clientSecret(CLIENT_SECRETS)
                 .code(authCode)
@@ -188,7 +183,7 @@ public class ApiController {
             // Http Header 설정
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<GoogleLoginRequest> httpRequestEntity = new HttpEntity<>(requestParams, headers);
+            HttpEntity<GoogleOAuthRequest> httpRequestEntity = new HttpEntity<>(requestParams, headers);
 
             // Post 요청
             ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(this.authUrl + "/token", httpRequestEntity, String.class);
@@ -202,45 +197,29 @@ public class ApiController {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
             GoogleLoginResponse googleLoginResponse = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<GoogleLoginResponse>() {});
 
-            // 사용자의 정보는 JWT Token으로 저장되어 있고, Id_Token에 값을 저장한다.
+            // 사용자의 정보는 JWT Token 으로 저장되어 있고, Id_Token 에 값을 저장한다.
             String jwtToken = googleLoginResponse.getIdToken();
 
             String accessToken = googleLoginResponse.getAccessToken();
 
-           /* YouTube youTube = apiExample.getYouTubeService(accessToken);
-
-
-            // 여기까지 세팅
-            YouTube.Channels.List request = youTube.channels().list(Collections.singletonList("snippet,contentDetails,statistics"));
-
-            // 요청
-            ChannelListResponse response = request.setMine(true).execute();
-
-
-            System.out.println("결과값");
-            System.out.println(response);
-            System.out.println(response.toString());
-
-            ObjectMapper mapper = new ObjectMapper();
-
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
-            YoutubeChannelList channelList = mapper.readValue(response.toString(), YoutubeChannelList.class);
-
-            System.out.println("변환 결과값");
-            System.out.println(channelList);
-            System.out.println(channelList.toString());
-            */
-
             // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
-            String requestUrl = UriComponentsBuilder.fromHttpUrl(authUrl + "/tokeninfo").queryParam("id_token", jwtToken).toUriString();
+            String requestUrl = UriComponentsBuilder.fromHttpUrl(authUrl + "/tokeninfo")
+                                    .queryParam("id_token", jwtToken).toUriString();
 
             String resultJson = restTemplate.getForObject(requestUrl, String.class);
 
+            // Authorization 헤더에 Bearer 토큰 포함시켜서 요청
             headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(accessToken);
 
-            String reqUrl = "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true&key=" + apiKey;
+//          uri 잘못 입력하거나 유지보수 좀 더 편하게 String 으로 직접 작성안하고
+//          UriComponentBuilder 사용해서 직관적으로 uri 작성
+            String reqUrl = UriComponentsBuilder.fromHttpUrl("https://youtube.googleapis.com/youtube/v3/channels")
+                                .queryParam("part", "snippet,contentDetails,statistics")
+                                .queryParam("mine", true)
+                                .queryParam("key", apiKey)
+                            .toUriString();
 
             // 채널 정보 요청
             HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -263,7 +242,7 @@ public class ApiController {
             YoutubeChannel channelList = mapper.readValue(responseBody, YoutubeChannel.class);
 //          readValue -> Json 값을 String 으로 받아서 YoutubeChannel 객체로 변환해주는 메서드
 //          String 값이 아니면 JsonParseException 예외 뜬다.
-//          YoutubeChannelList 정상 작동 but, JsonIgnoreProperties 썼는데 YoutubeChannel 객체는 왜 에러?
+//          YoutubeChannelList 정상 작동 but, JsonIgnoreProperties 썼는데 YoutubeChannel 객체는 왜 에러? => 필요한곳에 안써서 에러
 
             System.out.println("변환 결과값");
             System.out.println(channelList);
@@ -281,20 +260,20 @@ public class ApiController {
 
             if(resultJson != null) {
                 RequestId requestId = new RequestId();
-                requestId.setChannel_id(channelList.getItems().get(0).getId());
+                requestId.setChannelId(channelList.getItems().get(0).getId());
                 requestId.setSubscribe((long) channelList.getItems().get(0).getStatistics().getSubscriberCount());
-                requestId.setVideo_count((long) channelList.getItems().get(0).getStatistics().getVideoCount());
-                requestId.setView_count((long) channelList.getItems().get(0).getStatistics().getViewCount());
-                requestId.setChannel_name(channelList.getItems().get(0).getSnippet().getTitle());
-                requestId.setChannel_photo(channelList.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl());
+                requestId.setVideoCount((long) channelList.getItems().get(0).getStatistics().getVideoCount());
+                requestId.setViewCount((long) channelList.getItems().get(0).getStatistics().getViewCount());
+                requestId.setChannelName(channelList.getItems().get(0).getSnippet().getTitle());
+                requestId.setChannelPhoto(channelList.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl());
 
 
-                model.addAttribute("channel_id",requestId.getChannel_id());
+                model.addAttribute("channelId",requestId.getChannelId());
                 model.addAttribute("subscribe",requestId.getSubscribe());
-                model.addAttribute("video_count",requestId.getVideo_count());
-                model.addAttribute("view_count",requestId.getView_count());
-                model.addAttribute("channel_name",requestId.getChannel_name());
-                model.addAttribute("channel_photo", requestId.getChannel_photo());
+                model.addAttribute("videoCount",requestId.getVideoCount());
+                model.addAttribute("viewCount",requestId.getViewCount());
+                model.addAttribute("channelName",requestId.getChannelName());
+                model.addAttribute("channelPhoto", requestId.getChannelPhoto());
                 model.addAttribute("channel_certificate_button",true);
                 model.addAttribute("channel_photo_subscribe",false);
                 model.addAttribute("channel_errorMsg_hidden", true);
@@ -312,14 +291,13 @@ public class ApiController {
         model.addAttribute("channel_photo_subscribe", true);
         model.addAttribute("channel_errorMsg", "채널 인증이 되지 않았습니다.");
         model.addAttribute("channel_errorMsg_hidden", false);
-        HttpHeaders httpHeaders = new HttpHeaders();
+
         return "signup_youtuber";
     }
 
     @GetMapping("/oauth/youtube/answer")
     public String clearSession(HttpSession session) {
         session.invalidate();
-
         return "redirect:/signup_youtuber";
     }
 }

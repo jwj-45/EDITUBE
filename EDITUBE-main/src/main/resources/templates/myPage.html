@@ -37,11 +37,11 @@
             const password2 = document.getElementById("confirmPassword").value;
             const username = document.getElementById("name").value;
             const usernickname = document.getElementById("nickname").value;
-            const userphone = document.getElementById("phone_number").value;
+            const userphone = document.getElementById("phoneNumber").value;
             const address1 = document.getElementById("input-address").value;
             const address2 = document.getElementById("input-detail-address").value;
             const gender = document.getElementById("gender").value;
-            const userbirth = document.getElementById("birth_date").value;
+            const userbirth = document.getElementById("birthDate").value;
 
             const userdata = {
                 email : useremail,
@@ -49,7 +49,7 @@
                 confirmPssword : password2,
                 name : username,
                 nickname : usernickname,
-                phone_number : userphone,
+                phoneNumber : userphone,
                 address : address1,
                 detail_addr : address2,
                 gender : gender,
@@ -199,9 +199,9 @@
           <div class=phoneArea>
             <span class="phoneText">휴대전화</span>
             <div class=phoneNumInput>
-              <input type="tel" id="phone_number" placeholder="010-9999-9999" class="phone"
+              <input type="tel" id="phoneNumber" placeholder="010-9999-9999" class="phone"
                      style="border: none; background: transparent;"
-                     th:value="${user.phone_number}" name="phone_number" >
+                     th:value="${user.phoneNumber}" name="phoneNumber" >
             </div>
           </div>
           <button type="button" class=searchAddrButton onclick="ConfirmPhoneNumber()">번호 확인</button>
@@ -211,8 +211,8 @@
         var confirmPhoneNumber = "/ConfirmPhoneNumber";
 
         function ConfirmPhoneNumber() {
-            var inputValue = document.getElementById("phone_number").value;
-            if (document.getElementById("phone_number").value.length == 0) {
+            var inputValue = document.getElementById("phoneNumber").value;
+            if (document.getElementById("phoneNumber").value.length == 0) {
                  alert("입력란이 공란입니다.");
             }
             else {
@@ -228,7 +228,7 @@
                 }
               }
             };
-            var data = JSON.stringify({ "phone_number": inputValue });
+            var data = JSON.stringify({ "phoneNumber": inputValue });
             xhr.send(data);
         }
     </script>
@@ -261,8 +261,8 @@
           <div class=birthArea>
             <span class="birthText">생년월일</span>
             <div class=birthInput>
-              <input type="date" id="birth_date" class="birth_date"
-                     th:value="${user.birth_date}"name="birth_date" >
+              <input type="date" id="birthDate" class="birth_date"
+                     th:value="${user.birth_date}" name="birth_date" >
             </div>
           </div>
         </div>

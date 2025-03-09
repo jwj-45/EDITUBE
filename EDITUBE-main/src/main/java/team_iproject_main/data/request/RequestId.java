@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class RequestId {
-    private String channel_id;
-    private String youtuber_email;
+    private String channelId;
+    private String youtuberEmail;
     private Long subscribe;
-    private Long video_count;
-    private Long view_count;
-    private String channel_name;
-    private String channel_photo;
+    private Long videoCount;
+    private Long viewCount;
+    private String channelName;
+    private String channelPhoto;
 }

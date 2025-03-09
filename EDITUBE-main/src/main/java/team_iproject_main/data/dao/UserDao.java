@@ -18,7 +18,7 @@ public interface UserDao {
 
     UserDO findByNickname1(String nickname);
 
-    UserDO findByPhoneNumber(String phone_number);
+    UserDO findByPhoneNumber(String phoneNumber);
 
     List<UserDO> userFindById(UserSearchRequest userSearchRequest, int postsPerPage, int offset);
 
@@ -28,7 +28,7 @@ public interface UserDao {
 
     int getTotalResults();
 
-    UserDO findByNameAndPhone(String name, String phone_number);
+    UserDO findByNameAndPhone(String name, String phoneNumber);
 
     UserDO findByNickname(String nickname);
 

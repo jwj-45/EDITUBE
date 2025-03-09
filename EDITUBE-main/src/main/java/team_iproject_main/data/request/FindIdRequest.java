@@ -6,5 +6,5 @@ import lombok.Data;
 //0506-손주현
 public class FindIdRequest {
     private String name;
-    private String phone_number;
+    private String phoneNumber;
 }

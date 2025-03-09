@@ -19,30 +19,31 @@ public class UserService {
     @Autowired
     private UserDaoImpl userDao;
 
-    public void editor_signUp(RegisterRequest req) throws UnsupportedEncodingException {
+    public void editorSignUp(RegisterRequest req) throws UnsupportedEncodingException {
         UserDO user = userDao.findByEmail(req.getEmail());
-        UserDO userSelectByNickName = userDao.findByNickname(req.getNickname());
-        UserDO userSeleteByPhoneNumber = userDao.findByPhoneNumber(req.getPhone_number());
+        UserDO userSelectByNickName = userDao.findByNickname(req.getNickName());
+        UserDO userSelectByPhoneNumber = userDao.findByPhoneNumber(req.getPhoneNumber());
         if (user != null) {
             throw new DuplicateEmailException();
         }
         if (userSelectByNickName != null){
             throw new DuplicateNickNameException();
+
         }
-        if (userSeleteByPhoneNumber != null) {
-            throw new DuplicatePhone_numberException();
+        if (userSelectByPhoneNumber != null) {
+            throw new DuplicatePhoneNumberException();
         }
 
-        user = new UserDO(req.getEmail(), req.getPassword(), req.getName(), req.getNickname(), req.getPhone_number(), req.getAddress(),
-                req.getDetail_addr(), "편집자", req.getGender(), LocalDate.parse(req.getBirth_date()));
+        user = new UserDO(req.getEmail(), req.getPassword(), req.getName(), req.getNickName(), req.getPhoneNumber(), req.getAddress(),
+                req.getDetailAddr(), "편집자", req.getGender(), LocalDate.parse(req.getBirthDate()));
         userDao.createEditor(user);
     }
 
-    public void youtuber_signUp(RegisterRequest req) {
+    public void youtuberSignUp(RegisterRequest req) {
         UserDO user = userDao.findByEmail(req.getEmail());
-        UserDO userSelectByNickName = userDao.findByNickname(req.getNickname());
-        UserDO userSeleteByPhoneNumber = userDao.findByPhoneNumber(req.getPhone_number());
-        RegisterReqeustChannel uq = userDao.findByChannel(req.getChannel_id());
+        UserDO userSelectByNickName = userDao.findByNickname(req.getNickName());
+        UserDO userSelectByPhoneNumber = userDao.findByPhoneNumber(req.getPhoneNumber());
+        RegisterReqeustChannel uq = userDao.findByChannel(req.getChannelId());
         if (user != null) {
             throw new DuplicateEmailException();
         }
@@ -52,13 +53,13 @@ public class UserService {
         if (uq != null) {
             throw new DuplicateChannelException("channel_id address is already registered.");
         }
-        if (userSeleteByPhoneNumber != null) {
-            throw new DuplicatePhone_numberException();
+        if (userSelectByPhoneNumber != null) {
+            throw new DuplicatePhoneNumberException();
         }
 
-        user = new UserDO(req.getEmail(), req.getPassword(), req.getName(), req.getNickname(), req.getPhone_number(), req.getAddress(),
-                req.getDetail_addr(), "유튜버", req.getGender(), LocalDate.parse(req.getBirth_date()), req.getChannel_id(),
-                req.getSubscribe(), req.getVideo_count(), req.getView_count(), req.getChannel_name(), req.getChannel_photo());
+        user = new UserDO(req.getEmail(), req.getPassword(), req.getName(), req.getNickName(), req.getPhoneNumber(), req.getAddress(),
+                req.getDetailAddr(), "유튜버", req.getGender(), LocalDate.parse(req.getBirthDate()), req.getChannelId(),
+                req.getSubscribe(), req.getVideoCount(), req.getViewCount(), req.getChannelName(), req.getChannelPhoto());
         userDao.createYoutuber(user);
     }
 
@@ -97,8 +98,8 @@ public class UserService {
     }
 
     //0506-손주현 findUser 메소드 오버로딩
-    public UserDO findUser(String name, String phone_number){
-        return userDao.findByNameAndPhone(name, phone_number);
+    public UserDO findUser(String name, String phoneNumber){
+        return userDao.findByNameAndPhone(name, phoneNumber);
     }
 
     //0508손주현 - checkLoginAuth 수정
@@ -121,11 +122,11 @@ public class UserService {
     //0508손주현 - checkFindId 수정
     public boolean checkFindId(FindIdRequest req) throws UserNotFoundException {
         boolean result = false;
-        UserDO users = userDao.findByNameAndPhone(req.getName(), req.getPhone_number());
+        UserDO users = userDao.findByNameAndPhone(req.getName(), req.getPhoneNumber());
         if(users == null){
             throw new UserNotFoundException();
         }
-        if(users != null && users.checkNameAndPhonenum(req.getName(), req.getPhone_number())){
+        if(users != null && users.checkNameAndPhonenum(req.getName(), req.getPhoneNumber())){
             result = true;
         }
         return result;
@@ -136,7 +137,7 @@ public class UserService {
         userDao.updatePassword(email, newpwd);
     }
 
-    public void mypageupdate(UserUpdateRequest userUpdateRequest, String id) {
+    public void myPageUpdate(UserUpdateRequest userUpdateRequest, String id) {
         userDao.updateUserInfo(userUpdateRequest,id);
     }
 
@@ -146,7 +147,7 @@ public class UserService {
         return userDao.findByEmail(email);
     }
 
-    public boolean ConfirmEmail(String email) {
+    public boolean confirmEmail(String email) {
         boolean result = false;
         UserDO users = userDao.findByEmail(email);
         log.info("service"+users);
@@ -163,7 +164,7 @@ public class UserService {
         return result;
     }
 
-    public boolean ConfirmNickname(String nickname) {
+    public boolean confirmNickname(String nickname) {
         boolean result = false;
         UserDO users = userDao.findByNickname1(nickname);
         log.info("service"+users);
@@ -180,14 +181,14 @@ public class UserService {
         return result;
     }
 
-    public boolean ConfirmPhoneNumber(String phone_number) {
+    public boolean confirmPhoneNumber(String phoneNumber) {
         boolean result = false;
-        UserDO users = userDao.findByPhoneNumber(phone_number);
+        UserDO users = userDao.findByPhoneNumber(phoneNumber);
 
         if(users == null) {
             return result;
         }
-        else if(!users.ConFirmPhoneNumber(phone_number)) {
+        else if(!users.ConFirmPhoneNumber(phoneNumber)) {
             return result;
         }
                 /*if(users != null && users.ConfirmEmail(email)) {
@@ -197,8 +198,8 @@ public class UserService {
         return result;
     }
 
-    public UserDO findByPhoneNumber(String phone_number) {
-        return userDao.findByPhoneNumber(phone_number);
+    public UserDO findByPhoneNumber(String phoneNumber) {
+        return userDao.findByPhoneNumber(phoneNumber);
     }
 
     //0511- 손주현

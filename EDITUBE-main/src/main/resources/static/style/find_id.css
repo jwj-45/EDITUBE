@@ -78,7 +78,7 @@ main {
 }
 
 .name,
-.phone_number {
+.phoneNumber {
     border: none;
     background: transparent;
     color: rgba(29.000000171363354, 29.000000171363354, 32.00000189244747, 1);

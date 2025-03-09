@@ -1,5 +1,6 @@
 package team_iproject_main.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+@Log4j2
 @Controller
 public class UserController {
 
@@ -61,7 +63,7 @@ public class UserController {
     public String signup_editor(RegisterRequest req, Model model) {
         String view = "";
         try {
-            userService.editor_signUp(req);
+            userService.editorSignUp(req);
             model.addAttribute("msg", "회원가입 되었습니다.");
             view = "/main";
 
@@ -74,7 +76,7 @@ public class UserController {
             model.addAttribute("msg", "이미 존재하는 닉네임입니다.");
             view = "/signup_editor";
         }
-        catch (DuplicatePhone_numberException e) {
+        catch (DuplicatePhoneNumberException e) {
             model.addAttribute("msg", "이미 존재하는 번호입니다.");
             view = "/signup_editor";
         }
@@ -97,7 +99,7 @@ public class UserController {
     @PostMapping("/signup_youtuber")
     public String signup_youtuber(RegisterRequest req, Model model) {
         String view = "";
-        if(req.getChannel_id() == null) {
+        if(req.getChannelId() == null) {
             model.addAttribute("channel_errorMsg", "채널 인증이 되지 않아 가입을 진행할 수 없습니다.");
             model.addAttribute("channel_certificate_button", false);
             model.addAttribute("channel_photo_subscribe",true);
@@ -105,7 +107,8 @@ public class UserController {
             return "signup_youtuber";
         }
         try {
-            userService.youtuber_signUp(req);
+            log.info("채널 아이디 = {}", req.getChannelId());
+            userService.youtuberSignUp(req);
             model.addAttribute("msg", "회원가입 되었습니다.");
             view = "/main";
 
@@ -133,7 +136,7 @@ public class UserController {
             model.addAttribute("channel_errorMsg", "채널 인증이 되지 않아 가입을 진행할 수 없습니다.");
             view = "/signup_youtuber";
         }
-        catch (DuplicatePhone_numberException e) {
+        catch (DuplicatePhoneNumberException e) {
             model.addAttribute("msg", "이미 존재하는 번호입니다.");
             model.addAttribute("channel_certificate_button", false);
             model.addAttribute("channel_photo_subscribe",true);
@@ -201,7 +204,7 @@ public class UserController {
         String view = "";
         try{
             if(userService.checkFindId(req)){
-                UserDO users = userService.findUser(req.getName(), req.getPhone_number());
+                UserDO users = userService.findUser(req.getName(), req.getPhoneNumber());
                 req.setName(req.getName());
                 model.addAttribute("email", users.getEmail());
                 model.addAttribute("name", users.getName());
@@ -227,7 +230,7 @@ public class UserController {
 
         String email = pwReq.getEmail();
         String name  = pwReq.getName();
-        String phNum = pwReq.getPhone_number();
+        String phNum = pwReq.getPhoneNumber();
 
         UserDO userDO = userService.findUser(email);
 
@@ -235,7 +238,7 @@ public class UserController {
             model.addAttribute("failMsg", "<script> alert('존재하지 않는 이메일입니다.'); </script>");
             return "find_password";
         }
-        else if(!(userDO.getName().equals(name) && userDO.getPhone_number().equals(phNum))) {
+        else if(!(userDO.getName().equals(name) && userDO.getPhoneNumber().equals(phNum))) {
             model.addAttribute("failMsg","<script> alert('일치하는 회원정보가 없습니다.'); </script>");
             return "find_password";
         }
@@ -274,20 +277,20 @@ public class UserController {
     public String myPageEdit(@ModelAttribute("member") UserUpdateRequest userUpdateRequest, Model model, HttpSession session, RedirectAttributes redirectAttributes){
         String email = String.valueOf(session.getAttribute("email"));
         UserDO check = userService.findNickname(userUpdateRequest.getNickname());
-        UserDO numCheck = userService.findByPhoneNumber(userUpdateRequest.getPhone_number());
+        UserDO numCheck = userService.findByPhoneNumber(userUpdateRequest.getPhoneNumber());
 
         if(check != null && !userUpdateRequest.getNickname().equals(String.valueOf(session.getAttribute("nickname")))){
             redirectAttributes.addFlashAttribute("duplicateNickname","이미 존재하는 닉네임 입니다.");
             return "redirect:/myPage";
         }
 
-        if(numCheck != null && !userUpdateRequest.getPhone_number().equals(userService.findById(String.valueOf(session.getAttribute("email"))).getPhone_number())) {
+        if(numCheck != null && !userUpdateRequest.getPhoneNumber().equals(userService.findById(String.valueOf(session.getAttribute("email"))).getPhoneNumber())) {
             redirectAttributes.addFlashAttribute("duplicatePhoneNumber", "이미 존재하는 번호입니다.");
             return "redirect:/myPage";
         }
 
 
-        userService.mypageupdate(userUpdateRequest, email); // 사용자가 입력한값 데베에 업데이트
+        userService.myPageUpdate(userUpdateRequest, email); // 사용자가 입력한값 데베에 업데이트
         redirectAttributes.addFlashAttribute("msg", "회원 정보가 수정되었습니다.");
         session.setAttribute("nickname", userUpdateRequest.getNickname());
         return "redirect:/myPage";
@@ -444,7 +447,7 @@ public class UserController {
         String email = emailDto.getValue();
         System.out.println(email);
 
-        if(userService.ConfirmEmail(email)) {
+        if(userService.confirmEmail(email)) {
             return newValue;
         }
         newValue = "false";
@@ -457,7 +460,7 @@ public class UserController {
         String newValue = "true";
         String nickname = emailDto.getNickname();
 
-        if(userService.ConfirmNickname(nickname)) {
+        if(userService.confirmNickname(nickname)) {
             return newValue;
         }
         newValue = "false";
@@ -468,9 +471,9 @@ public class UserController {
     @RequestMapping(value = "/ConfirmPhoneNumber", method = RequestMethod.POST)
     public String ConFirmPhoneNumber1(@RequestBody EmailDto emailDto) {
         String newValue = "true";
-        String phone_number = emailDto.getPhone_number();
+        String phoneNumber = emailDto.getPhoneNumber();
 
-        if(userService.ConfirmPhoneNumber(phone_number)) {
+        if(userService.confirmPhoneNumber(phoneNumber)) {
             return newValue;
         }
         newValue = "false";

@@ -15,10 +15,10 @@ public class RecruitYoutuberInfoRowMapper implements RowMapper<YoutuberDO> {
         youtuberDO.setYoutuber_email(rs.getString("youtuber_email"));
         youtuberDO.setChannel_id(rs.getString("channel_id"));
         youtuberDO.setSubscribe(rs.getLong("subscribe"));
-        youtuberDO.setVideo_count(rs.getLong("video_count"));
-        youtuberDO.setView_count(rs.getLong("view_count"));
-        youtuberDO.setChannel_name(rs.getString("channel_name"));
-        youtuberDO.setChannel_photo(rs.getString("channel_photo"));
+        youtuberDO.setVideo_count(rs.getLong("videoCount"));
+        youtuberDO.setView_count(rs.getLong("viewCount"));
+        youtuberDO.setChannel_name(rs.getString("channelName"));
+        youtuberDO.setChannel_photo(rs.getString("channelPhoto"));
 
 
         return youtuberDO;

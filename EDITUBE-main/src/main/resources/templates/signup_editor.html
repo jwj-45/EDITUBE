@@ -24,20 +24,20 @@
             const password1 = document.getElementById("password").value;
             const password2 = document.getElementById("confirmPassword").value;
             const username = document.getElementById("name").value;
-            const usernickname = document.getElementById("nickname").value;
-            const userphone = document.getElementById("phone_number").value;
+            const usernickname = document.getElementById("nickName").value;
+            const userphone = document.getElementById("phoneNumber").value;
             const address1 = document.getElementById("input-address").value;
             const address2 = document.getElementById("input-detail-address").value;
             const gender = document.getElementById("gender").value;
-            const userbirth = document.getElementById("birth_date").value;
+            const userbirth = document.getElementById("birthDate").value;
 
             const userdata = {
                 email : useremail,
                 password : password1,
                 confirmPssword : password2,
                 name : username,
-                nickname : usernickname,
-                phone_number : userphone,
+                nickName : usernickname,
+                phoneNumber : userphone,
                 address : address1,
                 detail_addr : address2,
                 gender : gender,
@@ -178,79 +178,79 @@
         <div class=box>
           <div class=totalBox>
             <span class="titleText">닉네임</span>
-            <span class="inputBox"><input type="text" name = "nickname" placeholder="닉네임을 입력하세요" id="nickname" class="inputValue" required>
+            <span class="inputBox"><input type="text" name = "nickName" placeholder="닉네임을 입력하세요" id="nickName" class="inputValue" required>
             </span>
           </div>
           <button type="button" class=searchAddrButton onclick="ConfirmNickname()">닉네임 확인</button>
         </div>
-        <script th:inline="javascript">
-        var confirmNickname = "@{/ConfirmNickname}";
+          <script th:inline="javascript">
+              var confirmNickname = "/ConfirmNickname";
 
-        function ConfirmNickname() {
-            var inputValue = document.getElementById("nickname").value;
-            if (document.getElementById("nickname").value.length == 0) {
-                 alert("입력란이 공란입니다.");
-            }
-            else {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", confirmNickname, true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var newValue = xhr.responseText;
-                    var oldValue = 'false';
-                    var comparisonResult = oldValue === newValue ? "사용가능한 닉네임입니다." : "중복된 닉네임입니다.";
-                        alert(comparisonResult);
-
+              function ConfirmNickname() {
+                  var inputValue = document.getElementById("nickName").value;
+                  if (document.getElementById("nickName").value.length == 0) {
+                      alert("입력란이 공란입니다.");
                   }
-                }
-            };
-            var data = JSON.stringify({ "nickname": inputValue });
-            xhr.send(data);
-        }
-    </script>
+                  else {
+                      var xhr = new XMLHttpRequest();
+                      xhr.open("POST", confirmNickname, true);
+                      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                      xhr.onreadystatechange = function() {
+                          if (xhr.readyState === 4 && xhr.status === 200) {
+                              var newValue = xhr.responseText;
+                              var oldValue = 'false';
+                              var comparisonResult = oldValue === newValue ? "사용가능한 닉네임입니다." : "중복된 닉네임입니다.";
+                              alert(comparisonResult);
+
+                          }
+                      }
+                  }
+                  var data = JSON.stringify({ "nickName": inputValue });
+                  xhr.send(data);
+              }
+          </script>
         <div class=box>
           <div class=totalBox>
             <span class="titleText">성별</span>
             <span class="inputBox">
               <label><input type="radio" name="gender" value="남" required> 남성</label>&nbsp;&nbsp;&nbsp;
-              <label><input type="radio" name="gender" value="여"required> 여성</label>
+              <label><input type="radio" name="gender" value="여" required> 여성</label>
             </span>
           </div>
         </div>
         <div class=box>
           <div class=totalBox>
             <span class="titleText">핸드폰 번호</span>
-            <span class="inputBox"><input type="text" name="phone_number" placeholder="010-0000-0000" id="phone_number" class="inputValue" required>
+            <span class="inputBox"><input type="text" name="phoneNumber" placeholder="010-0000-0000" id="phoneNumber" class="inputValue" required>
             </span>
           </div>
           <button type="button" class=searchAddrButton onclick="ConfirmPhoneNumber()">번호 확인</button>
         </div>
-        <script th:inline="javascript">
-        var confirmPhoneNumber = "@{/ConfirmPhoneNumber}";
+          <script th:inline="javascript">
+              var confirmPhoneNumber = "/ConfirmPhoneNumber";
 
-        function ConfirmPhoneNumber() {
-            var inputValue = document.getElementById("phone_number").value;
-            if (document.getElementById("phone_number").value.length == 0) {
-                 alert("입력란이 공란입니다.");
-            }
-            else {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", confirmPhoneNumber, true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var newValue = xhr.responseText;
-                    var oldValue = 'false';
-                    var comparisonResult = oldValue === newValue ? "사용가능한 번호입니다." : "중복된 번호입니다.";
-                    alert(comparisonResult);
-                }
+              function ConfirmPhoneNumber() {
+                  var inputValue = document.getElementById("phoneNumber").value;
+                  if (document.getElementById("phoneNumber").value.length == 0) {
+                      alert("입력란이 공란입니다.");
+                  }
+                  else {
+                      var xhr = new XMLHttpRequest();
+                      xhr.open("POST", confirmPhoneNumber, true);
+                      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                      xhr.onreadystatechange = function() {
+                          if (xhr.readyState === 4 && xhr.status === 200) {
+                              var newValue = xhr.responseText;
+                              var oldValue = 'false';
+                              var comparisonResult = oldValue === newValue ? "사용가능한 번호입니다." : "중복된 번호입니다.";
+                              alert(comparisonResult);
+                          }
+                      }
+                  };
+                  var data = JSON.stringify({ "phoneNumber": inputValue });
+                  xhr.send(data);
               }
-            };
-            var data = JSON.stringify({ "phone_number": inputValue });
-            xhr.send(data);
-        }
-    </script>
+          </script>
         <div class="box address">
           <div class=totalBox>
             <span class="titleText">도로명 주소</span>
@@ -263,14 +263,14 @@
         <div class=box>
           <div class=totalBox>
             <span class="titleText">상세 주소</span>
-            <span class="inputBox"><input type="text" placeholder="상세 주소를 입력하세요" id="detail_addr" class="inputValue" name = "detail_addr" required>
+            <span class="inputBox"><input type="text" placeholder="상세 주소를 입력하세요" id="detailAddr" class="inputValue" name = "detailAddr" required>
             </span>
           </div>
         </div>
         <div class=box>
           <div class=totalBox>
             <span class="titleText">생년월일</span>
-            <span class="inputBox"><input type="date" id="birth_date" name = "birth_date" class="signup-birthdate" required>
+            <span class="inputBox"><input type="date" id="birthDate" name = "birthDate" class="signup-birthdate" required>
             </span>
           </div>
         </div>

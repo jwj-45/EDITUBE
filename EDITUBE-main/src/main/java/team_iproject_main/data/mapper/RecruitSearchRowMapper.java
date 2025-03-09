@@ -27,7 +27,7 @@ public class RecruitSearchRowMapper implements RowMapper<RecruitSearchDO> {
         recruitSearchDO.setOriginal_link(rs.getString("ORIGINAL_LINK"));
         recruitSearchDO.setPostdate(rs.getTimestamp("POST_DATE").toLocalDateTime());
         recruitSearchDO.setChannel_name(rs.getString("CHANNEL_NAME"));
-        recruitSearchDO.setChannel_photo(rs.getString("channel_photo"));
+        recruitSearchDO.setChannel_photo(rs.getString("channelPhoto"));
 
         return recruitSearchDO;
     }

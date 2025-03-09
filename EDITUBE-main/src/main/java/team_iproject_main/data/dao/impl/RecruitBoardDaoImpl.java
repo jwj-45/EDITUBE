@@ -209,7 +209,7 @@ public class RecruitBoardDaoImpl implements RecruitBoardDao {
 //    public List<RecruitDO> SearchFinder(RequestKeyword keywordDO) {
 //        String[] tools = keywordDO.getEdit_tools_no();
 //
-//        String sql = "select distinct r.recruit_no, r.recruit_title, r.deadline, y.channel_name " +
+//        String sql = "select distinct r.recruit_no, r.recruit_title, r.deadline, y.channelName " +
 //                "from recruit_board r " +
 //                "join user_youtuber y on r.youtuber_email = y.youtuber_email " +
 //                "join channel_category c on r.recruit_no = c.recruit_no " +
