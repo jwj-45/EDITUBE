@@ -49,18 +49,18 @@ public class UserController {
     }
 
     @GetMapping("/signup_options")
-    public String signup_optionForm() {
+    public String signupOptionForm() {
         return "signup_options";
     }
 
     @GetMapping("/signup_editor")
-    public String signup_editorForm() {
+    public String signupEditorForm() {
         return "signup_editor";
     }
 
     ////0508 손주현-편집자 회원가입 수정
     @PostMapping("/signup_editor")
-    public String signup_editor(RegisterRequest req, Model model) {
+    public String signupEditor(RegisterRequest req, Model model) {
         String view = "";
         try {
             userService.editorSignUp(req);
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @GetMapping("/signup_youtuber")
-    public String signup_youtuberForm(Model model, HttpSession session) {
+    public String signupYoutuberForm(Model model, HttpSession session) {
         model.addAttribute("channel_certificate_button", false);
         model.addAttribute("channel_photo_subscribe",true);
         model.addAttribute("channel_errorMsg_hidden", true);
@@ -97,7 +97,7 @@ public class UserController {
 
     //0508-유튜버 회원가입 수정
     @PostMapping("/signup_youtuber")
-    public String signup_youtuber(RegisterRequest req, Model model) {
+    public String signupYoutuber(RegisterRequest req, Model model) {
         String view = "";
         if(req.getChannelId() == null) {
             model.addAttribute("channel_errorMsg", "채널 인증이 되지 않아 가입을 진행할 수 없습니다.");
@@ -193,14 +193,14 @@ public class UserController {
     //0506-손주현
     //find_id.html 불러오기
     @GetMapping("/find_id")
-    public String find_idForm() {
+    public String findIdForm() {
         return "find_id";
     }
 
     //0506-손주현
     //Post find_id_result
     @PostMapping("/find_id")
-    public String find_id(FindIdRequest req, Model model) {
+    public String findId(FindIdRequest req, Model model) {
         String view = "";
         try{
             if(userService.checkFindId(req)){
@@ -220,13 +220,12 @@ public class UserController {
     }
 
     @GetMapping("/find_password")
-    public String find_passwordForm(Model model) {
+    public String findPasswordForm() {
         return "find_password";
     }
 
-    // 비밀번호 찾기 메서드,  230507 장준원
     @PostMapping("/find_password")
-    public String find_passwordFrom(@ModelAttribute("formData") FindPasswordRequest pwReq, Model model) {
+    public String findPasswordFrom(FindPasswordRequest pwReq, Model model) {
 
         String email = pwReq.getEmail();
         String name  = pwReq.getName();
@@ -247,17 +246,14 @@ public class UserController {
             return "find_change_password";
         }
     }
-    // 비밀번호 변경 메서드(찾기에서 변경),  230509 장준원
+
     @PostMapping("/find_change_password")
-    public String changePassword(@RequestParam(value = "email") String email, @RequestParam(value = "newpwd") String newpwd, Model model) {
+    public String changePassword(@RequestParam(value = "email") String email, @RequestParam(value = "newpwd") String newpwd) {
 
-        String setEmail = email;
-        userService.changePwd(setEmail, newpwd);
-
+        userService.changePwd(email, newpwd);
         return "main";
     }
 
-    //5.8 양서림
     @GetMapping("/myPage")
     public String myPageForm(HttpSession session,Model model, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
@@ -272,9 +268,8 @@ public class UserController {
         return "myPage";
     }
 
-    //5.9 양서림
     @PostMapping("/myPage")
-    public String myPageEdit(@ModelAttribute("member") UserUpdateRequest userUpdateRequest, Model model, HttpSession session, RedirectAttributes redirectAttributes){
+    public String myPageEdit(@ModelAttribute("member") UserUpdateRequest userUpdateRequest, HttpSession session, RedirectAttributes redirectAttributes){
         String email = String.valueOf(session.getAttribute("email"));
         UserDO check = userService.findNickname(userUpdateRequest.getNickname());
         UserDO numCheck = userService.findByPhoneNumber(userUpdateRequest.getPhoneNumber());
@@ -297,7 +292,7 @@ public class UserController {
     }
 
     @GetMapping("/changepwd")
-    public String ChangepwdForm(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String changePwdForm(RedirectAttributes redirectAttributes, HttpSession session) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -307,7 +302,7 @@ public class UserController {
     }
 
     @PostMapping("/changepwd")
-    public String Changepwd(@RequestParam(value = "current") String current, @RequestParam(value = "newpwd") String newpwd , Model model,
+    public String changePwd(@RequestParam(value = "current") String current, @RequestParam(value = "newpwd") String newpwd , Model model,
                             HttpSession session, RedirectAttributes re) {
         String email = String.valueOf(session.getAttribute("email"));
         UserDO userDO = userService.findUser(email);
@@ -323,10 +318,10 @@ public class UserController {
             return "redirect:/myPage";
         }
     }
-    //0511- 손주현
+
     @PostMapping("/disableAccount")
-    public String disalbeAccount(@RequestParam(value = "password") String password,
-                                 HttpSession session, Model model) {
+    public String deleteAccount(@RequestParam(value = "password") String password,
+                                HttpSession session, Model model) {
         String email = String.valueOf(session.getAttribute("email"));
         UserDO userDO = userService.findUser(email);
 
@@ -342,10 +337,8 @@ public class UserController {
         return "/main";
     }
 
-
-    //0511- 손주현
     @GetMapping("/disableAccount")
-    public String disalbeAccountForm(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String deleteAccountForm(HttpSession session, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -354,8 +347,6 @@ public class UserController {
         return "disableAccount";
     }
 
-    //희수
-    //관리자 (회원 조회)
     @GetMapping("/memberManage")
     public String list(@RequestParam(value = "page", defaultValue = "1") int page, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
@@ -385,10 +376,9 @@ public class UserController {
 
         return "memberManage";
     }
-    //희수
-    //id(이메일),닉네임 조회
+
     @PostMapping("/memberManage/search")
-    public String findidPost(@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session,
+    public String findIdPost(@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session,
                              @ModelAttribute("userSearchRequest") UserSearchRequest userSearchRequest, Model model, RedirectAttributes redirectAttributes) {
         if(userSearchRequest.getSearchtext().equals("")) {
             return list(1, model, session, redirectAttributes);
@@ -399,7 +389,7 @@ public class UserController {
     }
 
     @GetMapping("/memberManage/search")
-    public String findid(@RequestParam(value = "page", defaultValue = "1") int page
+    public String findId(@RequestParam(value = "page", defaultValue = "1") int page
             , Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
@@ -431,10 +421,9 @@ public class UserController {
 
         return "memberSearch";
     }
-    //희수
-    //유저 삭제
+
     @PostMapping("/deleteMember")
-    public String delectId(@RequestParam(value = "delete") String email, Model model) {
+    public String deleteId(@RequestParam(value = "delete") String email) {
         userService.deleteMember(email);
         return "memberManage";
     }
