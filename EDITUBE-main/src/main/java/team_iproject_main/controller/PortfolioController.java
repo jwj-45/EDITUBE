@@ -53,7 +53,7 @@ public class PortfolioController {
     }
 
     @GetMapping("/myPage/portfolio_result")
-    public String portfolioresult(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String portfolioResult(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
@@ -108,7 +108,7 @@ public class PortfolioController {
 
     //5.11 양서림
     @PostMapping("/portfolio_edit")
-    public String portfolioedit(HttpSession session, PortfolioEditRequest edit, RedirectAttributes redirectAttributes, @RequestParam("edit_link") String[] edit_link,
+    public String portfolioEdit(HttpSession session, PortfolioEditRequest edit, RedirectAttributes redirectAttributes, @RequestParam("edit_link") String[] edit_link,
                                 @RequestParam("salaryhid") String salaryhid, @RequestParam("worktypehid") String worktypehid, @RequestParam("toyoutuberhid") String toyoutuberhid) {
         String email = String.valueOf(session.getAttribute("email"));
 
@@ -221,7 +221,7 @@ public class PortfolioController {
     //희수
     //구직자 상세 조회
     @GetMapping("/portfolio_result")
-    public String portfolio_result(String email, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String portfolioResult(String email, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -247,7 +247,7 @@ public class PortfolioController {
     //희수
     //포트폴리오 삭제
     @GetMapping("/portfolio_delete")
-    public String portfolio_delete(String email1, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+    public String portfolioDelete(String email1, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
 
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
@@ -264,7 +264,7 @@ public class PortfolioController {
 
     // 겸손
     @PostMapping("/portfolio_board/search")
-    public String portfolio_board_search_POST(
+    public String portfolioBoardSearchPOST(
             @RequestParam("folio_search_text") String folio_search_text,
             @RequestParam("location") String location,
             @RequestParam(value = "edit_tools_folio", required = false) String[] edit_tools_folio,
@@ -282,7 +282,7 @@ public class PortfolioController {
     }
 
     @GetMapping("/portfolio_board/search")
-    public String portfolio_board_search(@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session, Model model) {
+    public String portfolioBoardSearch(@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session, Model model) {
 
         int postsPerPage = 10;
         int pageNavigationLinks = 5;

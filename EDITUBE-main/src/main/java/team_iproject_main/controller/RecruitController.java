@@ -48,7 +48,7 @@ public class RecruitController {
 
     //주현 0512:수업시간중에 수정
     @GetMapping("/recruit_result")
-    public String recruitresult(int recruitNo, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String recruitResult(int recruitNo, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -83,7 +83,7 @@ public class RecruitController {
     }
 
     @GetMapping("/recruit_board_edit")
-    public String recruit_board_editForm(HttpSession session, RedirectAttributes redirectAttributes) {
+    public String recruitBoardEditForm(HttpSession session, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -97,7 +97,7 @@ public class RecruitController {
     }
 
     @PostMapping("/recruit_board_edit")
-    public String recruit_board_edit(RecruitBoardEditRequest req, HttpSession session, Model model) {
+    public String recruitBoardEdit(RecruitBoardEditRequest req, HttpSession session, Model model) {
         String email = session.getAttribute("email").toString();
 
         recruitService.recruit_boardWrite(email, req);
@@ -108,7 +108,7 @@ public class RecruitController {
     //희수
     //구인글 삭제
     @GetMapping("/recruit_delete")
-    public String recruit_delete(int recruitNo, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String recruitDelete(int recruitNo, RedirectAttributes redirectAttributes, HttpSession session) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -127,7 +127,7 @@ public class RecruitController {
 
     //주현 0513
     @GetMapping("/recruit_delete_myPage")
-    public String recruit_delete_myPage(int recruitNo, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String recruitDeleteMyPage(int recruitNo, RedirectAttributes redirectAttributes, HttpSession session) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -144,7 +144,7 @@ public class RecruitController {
 
 
     @GetMapping("/recruit_board_modify")
-    public String recruit_modifyForm(int recruitNo, Model model, HttpSession session, RedirectAttributes redirectAttributes){
+    public String recruitModifyForm(int recruitNo, Model model, HttpSession session, RedirectAttributes redirectAttributes){
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -186,7 +186,7 @@ public class RecruitController {
     }
 
     @PostMapping("/recruit_board_modify")
-    public String recruit_board_modify(@RequestParam(value = "recruitNo") int recruitNo, RecruitBoardEditRequest req, HttpSession session, RedirectAttributes redirectAttributes){
+    public String recruitBoardModify(@RequestParam(value = "recruitNo") int recruitNo, RecruitBoardEditRequest req, HttpSession session, RedirectAttributes redirectAttributes){
         String email = session.getAttribute("email").toString();
 
         recruitService.recruit_boardModify(req, recruitNo, email);
@@ -197,14 +197,14 @@ public class RecruitController {
 
     //준영 페이징 추가
     @PostMapping("/recruit_board/search")
-    public String board_Search_find_Post(@ModelAttribute("searchForm") RequestKeyword keyword, HttpSession session) {
+    public String boardSearchFindPost(@ModelAttribute("searchForm") RequestKeyword keyword, HttpSession session) {
         session.setAttribute("keyword", keyword);
         return "redirect:/recruit_board/search";
     }
 
     //준영 페이징 추가
     @GetMapping("/recruit_board/search")
-    public String board_Search_find(@RequestParam(value = "page", defaultValue = "1") int page
+    public String boardSearchFind(@RequestParam(value = "page", defaultValue = "1") int page
             , Model model, HttpSession session) {
 
         RequestKeyword keyword = (RequestKeyword)session.getAttribute("keyword");
@@ -283,7 +283,7 @@ public class RecruitController {
     }
 
     @PostMapping("/recruit_board/main")
-    public String main_Search_find_Post(@ModelAttribute("searchForm") RequestKeyword keyword, HttpSession session) {
+    public String mainSearchFindPost(@ModelAttribute("searchForm") RequestKeyword keyword, HttpSession session) {
         session.setAttribute("keyword", keyword);
         return "redirect:/recruit_board/search";
     }

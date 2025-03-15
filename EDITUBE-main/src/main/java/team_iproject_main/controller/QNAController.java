@@ -20,13 +20,13 @@ public class QNAController {
     private QnAService qnAService;
 
     @GetMapping("/Qna_question")
-    public String Qna_question () {
+    public String QnaQuestion() {
         return "Qna_question";
     }
 
     //희수
     @GetMapping("/QnAboard")
-    public String QnA_board(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+    public String QnABoard(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
         int postsPerPage = 10;
         int pageNavigationLinks = 5;
 
@@ -45,9 +45,8 @@ public class QNAController {
         return "QnAboard";
     }
 
-    //희수
     @PostMapping("/QnAboard")
-    public String QA_boardForm(HttpSession session, String question, RedirectAttributes redirectAttributes) {
+    public String QnABoardForm(HttpSession session, String question, RedirectAttributes redirectAttributes) {
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -62,7 +61,7 @@ public class QNAController {
     }
 
     @PostMapping("/QnAboard/answer")
-    public String QA_board_answerForm(int qnano, String answer) {
+    public String QnABoardAnswerForm(int qnano, String answer) {
         qnAService.qnaAnswer(qnano, answer);
 
         return "redirect:/QnAboard";

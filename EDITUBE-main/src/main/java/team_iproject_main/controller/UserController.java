@@ -445,7 +445,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/ConfirmNickname", method = RequestMethod.POST)
-    public String ConFirmNickname1(@RequestBody EmailDto emailDto) {
+    public String conFirmNickname1(@RequestBody EmailDto emailDto) {
         String newValue = "true";
         String nickname = emailDto.getNickname();
 
@@ -458,7 +458,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/ConfirmPhoneNumber", method = RequestMethod.POST)
-    public String ConFirmPhoneNumber1(@RequestBody EmailDto emailDto) {
+    public String conFirmPhoneNumber1(@RequestBody EmailDto emailDto) {
         String newValue = "true";
         String phoneNumber = emailDto.getPhoneNumber();
 

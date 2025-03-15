@@ -77,7 +77,7 @@ public class ApplyController {
     }
 
     @GetMapping("applynow")
-    public String applynowForm(@RequestParam(value = "page", defaultValue = "1") int page, Model model, HttpSession session, RedirectAttributes redirectAttributes){
+    public String applyNowForm(@RequestParam(value = "page", defaultValue = "1") int page, Model model, HttpSession session, RedirectAttributes redirectAttributes){
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -122,7 +122,7 @@ public class ApplyController {
     //주현 0512
     //주현 0512 수업시간 중에 수정
     @GetMapping("/applynow_upload")
-    public String applynow_uploadForm(int recruitNo, Model model, HttpSession session, RedirectAttributes redirectAttributes){
+    public String applyNowUploadForm(int recruitNo, Model model, HttpSession session, RedirectAttributes redirectAttributes){
         if(session.getAttribute("email") == null) {
             redirectAttributes.addFlashAttribute("notLogin","로그인 후 이용 가능합니다.");
             return "redirect:/login";
@@ -164,8 +164,8 @@ public class ApplyController {
     }
 
     @PostMapping("/applynow_upload")
-    public String applynow_upload(@RequestParam(value = "recruitNo") int recruitNo, @RequestParam(value = "edited_link") String edited_link,
-                                  @RequestParam(value = "editor_memo") String editor_memo, HttpSession session, RedirectAttributes re) {
+    public String applyNowUpload(@RequestParam(value = "recruitNo") int recruitNo, @RequestParam(value = "edited_link") String edited_link,
+                                 @RequestParam(value = "editor_memo") String editor_memo, HttpSession session, RedirectAttributes re) {
         String email = session.getAttribute("email").toString();
 
         applyService.applyUploadVideo(recruitNo, email, edited_link, editor_memo);
